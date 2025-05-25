@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug philosphers (gdb)",
+      "type": "cppdbg",
+      "request": "launch",
+      "preLaunchTask": "build philosphers",          // ← runs the make-task first
+      "program": "${workspaceFolder}/philosophers",   // adapt if you build elsewhere
+      "cwd": "${workspaceFolder}",
+      "args": ["3", "2", "3", "4"],                            // put CLI args here if needed
+      "stopAtEntry": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",      // or "gdb.exe" on Windows/MinGW
+      "setupCommands": [
+        { "description": "Enable pretty-printing", "text": "-enable-pretty-printing" }
+      ]
+    }
+  ]
+}
