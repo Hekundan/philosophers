@@ -32,21 +32,41 @@ int	init_mutex(pthread_mutex_t *forks, t_rules *rules)
 	return (0);
 }
 
-int	init_threads(t_philosopher *philosopher)
+int     init_threads(t_philosopher *philosopher)
 {
-	int	i;
-	int	n_threads;
+        int     i;
+        int     n_threads;
 
-	n_threads = philosopher->rules->n_philos;
-	i = 0;
-	while (i < n_threads)
-	{
-		if (pthread_create(&(philosopher[i].thread),
-				NULL, philo_routine, &(philosopher[i])))
-		{
-			ft_putstr_fd("Mutex init failed", 1);
-			return (-1);
-		}
-		i++;
-	}
+        n_threads = philosopher->rules->n_philos;
+        i = 0;
+        while (i < n_threads)
+        {
+                if (pthread_create(&(philosopher[i].thread),
+                                NULL, philo_routine, &(philosopher[i])))
+                {
+                        ft_putstr_fd("Mutex init failed", 1);
+                        return (-1);
+                }
+                i++;
+        }
+        return (0);
+}
+
+int     join_threads(t_philosopher *philosopher)
+{
+        int     i;
+        int     n_threads;
+
+        n_threads = philosopher->rules->n_philos;
+        i = 0;
+        while (i < n_threads)
+        {
+                if (pthread_join(philosopher[i].thread, NULL))
+                {
+                        ft_putstr_fd("Thread join failed", 1);
+                        return (-1);
+                }
+                i++;
+        }
+        return (0);
 }

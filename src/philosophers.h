@@ -45,6 +45,10 @@ typedef struct s_philosopher
 int	parse(int argn, char **argc, t_rules *rules);
 int	init_philos(t_philosopher **philosphers,
 		t_rules *rules, pthread_mutex_t **forks);
-int	philo_routine(void *var);
+int	init_mutex(pthread_mutex_t *forks, t_rules *rules);
+int	init_threads(t_philosopher *philosopher);
+int	join_threads(t_philosopher *philosopher);
+int	get_time(void);
+void	*philo_routine(void *var);
 
 #endif
