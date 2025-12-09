@@ -25,6 +25,20 @@ static int	non_negative_mod(int a, int b)
 	return (r);
 }
 
+static void	init_philosopher_fields(t_philosopher *philo, int i,
+	t_rules *rules, pthread_mutex_t *forks)
+{
+	philo->id = i;
+	philo->rules = rules;
+	philo->right_fork = forks + ((i - 1) % rules->n_philos);
+	philo->left_fork = forks + non_negative_mod((i - 2), rules->n_philos);
+	philo->died = false;
+	philo->times_eaten = 0;
+	philo->state = STATE_THINKING;
+	philo->time_last_eat = rules->start_time;
+	philo->time_state_change = rules->start_time;
+}
+
 int	init_philos(t_philosopher **philosphers,
 		t_rules *rules, pthread_mutex_t **forks)
 {
@@ -42,12 +56,7 @@ int	init_philos(t_philosopher **philosphers,
 	i = 1;
 	while (i <= rules->n_philos)
 	{
-		(*philosphers)[i - 1].id = i;
-		(*philosphers)[i - 1].rules = rules;
-		(*philosphers)[i - 1].right_fork = (*forks)
-			+ ((i - 1) % rules->n_philos);
-		(*philosphers)[i - 1].left_fork = (*forks)
-			+ non_negative_mod((i - 2), rules->n_philos);
+		init_philosopher_fields(&(*philosphers)[i - 1], i, rules, *forks);
 		i++;
 	}
 	return (0);

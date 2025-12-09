@@ -1,34 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_routine.c                                    :+:      :+:    :+:   */
+/*   time_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: johartma <johartma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 11:28:35 by johartma          #+#    #+#             */
+/*   Created: 2025/12/09 13:00:00 by johartma          #+#    #+#             */
 /*   Updated: 2025/12/09 13:00:00 by johartma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
+#include <sys/time.h>
 #include <unistd.h>
 
-void	*philo_routine(void *arg)
+long	get_time_ms(void)
 {
-	t_philosopher	*philo;
+	struct timeval	tv;
 
-	philo = (t_philosopher *)arg;
-	if (philo->id % 2 == 0)
-		usleep(1000);
-	while (!philo->rules->exit_flag)
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
+void	precise_sleep(long duration_ms)
+{
+	long	start;
+	long	current;
+
+	start = get_time_ms();
+	while (1)
 	{
-		think_action(philo);
-		if (take_forks(philo) == -1)
+		current = get_time_ms();
+		if (current - start >= duration_ms)
 			break ;
-		eat_action(philo);
-		if (check_simulation_end(philo->rules))
-			break ;
-		sleep_action(philo);
+		if (current - start < duration_ms - 10)
+			usleep(1000);
+		else
+			usleep(100);
 	}
-	return (NULL);
+}
+
+int	time_since(long start_time)
+{
+	return ((int)(get_time_ms() - start_time));
 }

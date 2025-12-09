@@ -9,14 +9,21 @@ INCLUDES    = -I. -I$(LIBFT_PATH)
 
 SRCS_PROGRAMM = src/main.c \
 src/parse/parse.c \
-src/philo/init_philos.c
+src/philo/init_philos.c \
+src/philo/init_mutex.c \
+src/philo/philo_routine.c \
+src/philo/philo_actions.c \
+src/philo/monitor.c \
+src/utils/time_utils.c \
+src/utils/print_utils.c \
+src/cleanup/cleanup.c
 
 OBJS_PROGRAMM = $(SRCS_PROGRAMM:.c=.o)
 
 all: $(NAME_PROGRAMM)
 
 $(NAME_PROGRAMM): $(OBJS_PROGRAMM) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS_PROGRAMM) $(LIBFT) $(INCLUDES) -o $(NAME_PROGRAMM)
+	$(CC) $(CFLAGS) $(OBJS_PROGRAMM) $(LIBFT) $(INCLUDES) -pthread -o $(NAME_PROGRAMM)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@

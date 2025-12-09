@@ -28,7 +28,7 @@ static int	is_not_numeric(char *c)
 	return (0);
 }
 
-int	parse(int argn, char **argc, t_rules *rules)
+static int	validate_args(int argn, char **argc)
 {
 	int	i;
 
@@ -47,6 +47,13 @@ int	parse(int argn, char **argc, t_rules *rules)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	parse(int argn, char **argc, t_rules *rules)
+{
+	if (validate_args(argn, argc) == -1)
+		return (-1);
 	rules->n_philos = ft_atoi(argc[1]);
 	rules->time_to_die = ft_atoi(argc[2]);
 	rules->time_to_eat = ft_atoi(argc[3]);

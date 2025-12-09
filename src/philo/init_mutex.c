@@ -44,9 +44,33 @@ int	init_threads(t_philosopher *philosopher)
 		if (pthread_create(&(philosopher[i].thread),
 				NULL, philo_routine, &(philosopher[i])))
 		{
-			ft_putstr_fd("Mutex init failed", 1);
+			ft_putstr_fd("Thread creation failed", 1);
 			return (-1);
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	init_rules_mutexes(t_rules *rules)
+{
+	rules->print_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!rules->print_mutex)
+		return (-1);
+	if (pthread_mutex_init(rules->print_mutex, NULL))
+	{
+		free(rules->print_mutex);
+		return (-1);
+	}
+	rules->philosphers_finished_eating = malloc(sizeof(int));
+	if (!rules->philosphers_finished_eating)
+	{
+		pthread_mutex_destroy(rules->print_mutex);
+		free(rules->print_mutex);
+		return (-1);
+	}
+	*rules->philosphers_finished_eating = 0;
+	rules->exit_flag = false;
+	rules->start_time = get_time_ms();
+	return (0);
 }
